@@ -1,0 +1,9 @@
+@echo off
+echo Starting OJT Frontend...
+cd /d "%~dp0frontend"
+if not exist "node_modules" (
+    echo Installing npm packages...
+    npm install
+)
+echo Starting Vite dev server...
+npm run dev
