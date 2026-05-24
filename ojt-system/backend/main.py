@@ -5,11 +5,18 @@ from app.api.routes import (
     moa, dtr, weekly_reports, evaluations, reports, monitoring
 )
 
+from app.core.config import settings
+
 app = FastAPI(title="OJT System", version="1.0.0", redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        settings.FRONTEND_URL,
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
