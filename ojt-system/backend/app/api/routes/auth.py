@@ -72,7 +72,7 @@ def _create_user(supabase, user_id, email, password, full_name, role,
 
     if role == "supervisor":
         company = supabase.table("companies").select("id") \
-            .eq("contact_email", email).execute()
+            .ilike("contact_email", email).execute()
         if company.data:
             supabase.table("companies") \
                 .update({"supervisor_user_id": user_id}) \
@@ -220,7 +220,7 @@ async def me(current_user=Depends(get_current_user), supabase=Depends(get_supaba
     if current_user["role"] == "supervisor":
         try:
             company = supabase.table("companies").select("id, name") \
-                .eq("contact_email", current_user["email"]).execute()
+                .ilike("contact_email", current_user["email"]).execute()
             if company.data:
                 user_data["company"] = {
                     "id": company.data[0]["id"],

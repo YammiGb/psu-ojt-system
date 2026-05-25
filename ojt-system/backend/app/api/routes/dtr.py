@@ -165,7 +165,7 @@ async def verify_dtr(
             try:
                 company = supabase.table("companies").select("id") \
                     .eq("id", company_id) \
-                    .eq("contact_email", current_user["email"]).execute()
+                    .ilike("contact_email", current_user["email"]).execute()
                 if company.data:
                     is_linked = True
             except Exception:

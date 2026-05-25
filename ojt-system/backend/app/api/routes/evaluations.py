@@ -293,7 +293,7 @@ async def get_my_interns(
 
     # Find company linked to this supervisor by contact_email
     company = supabase.table("companies").select("id, name") \
-        .eq("contact_email", current_user["email"]).execute()
+        .ilike("contact_email", current_user["email"]).execute()
 
     if not company.data:
         # Fallback: find placements where supervisor submitted eval
