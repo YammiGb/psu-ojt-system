@@ -4,6 +4,8 @@ import { evaluationService, placementService } from '../../services'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import toast from 'react-hot-toast'
 import { FolderOpen, Upload, Plus, X, Paperclip, FileCheck } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 export default function StudentPortfolio() {
   const qc = useQueryClient()
@@ -184,7 +186,7 @@ export default function StudentPortfolio() {
               </p>
               {grade.portfolio_url && (
                 <div className="mt-4">
-                  <a href={grade.portfolio_url} target="_blank" rel="noreferrer"
+                  <a href={ensureAbsoluteUrl(grade.portfolio_url)} target="_blank" rel="noreferrer"
                     className="text-xs text-blue-750 font-extrabold hover:text-blue-900 bg-white hover:bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition-all">
                     <Paperclip size={12} />
                     <span className="truncate max-w-[150px]">{grade.portfolio_file_name || 'View File'}</span>
@@ -210,7 +212,7 @@ export default function StudentPortfolio() {
               </p>
               {grade.narrative_report_url && (
                 <div className="mt-4">
-                  <a href={grade.narrative_report_url} target="_blank" rel="noreferrer"
+                  <a href={ensureAbsoluteUrl(grade.narrative_report_url)} target="_blank" rel="noreferrer"
                     className="text-xs text-blue-750 font-extrabold hover:text-blue-900 bg-white hover:bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition-all">
                     <Paperclip size={12} />
                     <span className="truncate max-w-[150px]">{grade.narrative_report_file_name || 'View File'}</span>

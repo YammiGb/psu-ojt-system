@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { applicationService, companyService, studentService } from '../../services'
 import toast from 'react-hot-toast'
 import { FileText, Plus, ExternalLink, ShieldAlert, Archive, X } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 const SEMESTERS     = ['1st', '2nd', 'Summer']
 const CURRENT_YEAR  = `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`
@@ -156,7 +158,7 @@ export default function StudentApplication() {
                       <div key={label} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm">
                         <span className={`w-2 h-2 rounded-full ${url ? 'bg-green-500' : 'bg-gray-300'}`} />
                         {url ? (
-                          <a href={url} target="_blank" rel="noreferrer" className="text-blue-750 hover:text-blue-900 hover:underline flex items-center gap-1 font-extrabold">
+                          <a href={ensureAbsoluteUrl(url)} target="_blank" rel="noreferrer" className="text-blue-750 hover:text-blue-900 hover:underline flex items-center gap-1 font-extrabold">
                             {label} <ExternalLink size={12} />
                           </a>
                         ) : (
@@ -292,6 +294,8 @@ export default function StudentApplication() {
                       <div key={key}>
                         <label className="label text-xs font-bold text-gray-750 mb-1">{label}</label>
                         <input type="url"
+                          pattern="https?://.+"
+                          title="Please enter a valid URL starting with http:// or https://"
                           className="input py-2.5 px-3 text-sm lg:text-sm animate-none"
                           placeholder="https://drive.google.com/file/d/..."
                           value={form[key]} onChange={set(key)} />

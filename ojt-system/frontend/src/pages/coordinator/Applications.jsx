@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { applicationService } from '../../services'
 import toast from 'react-hot-toast'
 import { FileText, CheckCircle, XCircle, Clock, Eye, Search, X, RotateCcw, AlertTriangle, ExternalLink, Users } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 const STATUS_STYLE = {
   pending:      'bg-amber-50 text-amber-800 border border-amber-200/50',
@@ -229,8 +231,8 @@ export default function CoordinatorApplications() {
                             [app.endorsement_letter_url, 'EL', 'Endorsement Letter'],
                             [app.parent_consent_url,     'PC', 'Parent Consent'],
                           ].map(([url, label, title]) => (
-                            url
-                              ? <a key={label} href={url} target="_blank" rel="noreferrer" title={title}
+                             url
+                              ? <a key={label} href={ensureAbsoluteUrl(url)} target="_blank" rel="noreferrer" title={title}
                                   className="text-[10px] bg-green-50 text-green-700 px-2 py-1 rounded-lg font-black uppercase tracking-wider hover:bg-green-100 border border-green-200/50 transition-colors inline-flex items-center gap-0.5">
                                   {label} <ExternalLink size={8} />
                                 </a>

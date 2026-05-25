@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { evaluationService, placementService } from '../../services'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { GraduationCap, TrendingUp } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 export default function StudentGrades() {
   const { data: placements } = useQuery({
@@ -98,7 +100,7 @@ export default function StudentGrades() {
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-gray-800 truncate">{lbl}</p>
                     {url && (
-                      <a href={url} target="_blank" rel="noreferrer" className="text-xs text-blue-600 font-black hover:underline mt-0.5 inline-block">
+                      <a href={ensureAbsoluteUrl(url)} target="_blank" rel="noreferrer" className="text-xs text-blue-600 font-black hover:underline mt-0.5 inline-block">
                         View submitted file
                       </a>
                     )}

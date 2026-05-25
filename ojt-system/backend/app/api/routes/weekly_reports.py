@@ -64,7 +64,7 @@ async def submit_report(
     if dup.data:
         raise HTTPException(409, f"Report for week {data.week_number} already submitted")
 
-    result = supabase.table("weekly_reports").insert({
+    payload = {
         "placement_id":    str(data.placement_id),
         "student_id":      str(p["student_id"]),
         "week_number":     data.week_number,
@@ -76,7 +76,17 @@ async def submit_report(
         "file_url":        data.file_url,
         "file_name":       data.file_name,
         "status":          "submitted",
-    }).execute()
+    }
+
+    try:
+        result = supabase.table("weekly_reports").insert(payload).execute()
+    except Exception as e:
+        # Fallback if file_name column does not exist in database yet
+        if "file_name" in str(e) or "PGRST204" in str(e):
+            payload.pop("file_name", None)
+            result = supabase.table("weekly_reports").insert(payload).execute()
+        else:
+            raise e
 
     if not result.data:
         raise HTTPException(500, "Failed to submit report")

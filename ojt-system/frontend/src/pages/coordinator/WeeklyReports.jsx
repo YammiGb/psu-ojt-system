@@ -5,6 +5,8 @@ import StatusBadge from '../../components/StatusBadge'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import toast from 'react-hot-toast'
 import { BookOpen, ChevronDown, ChevronUp, CheckCircle2, RotateCcw, Calendar, FileText, Send, X, ClipboardCheck, ArrowUpRight, HelpCircle } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 export default function CoordinatorWeeklyReports() {
   const qc = useQueryClient()
@@ -173,7 +175,7 @@ export default function CoordinatorWeeklyReports() {
 
                   {/* Document Attachment Link */}
                   {r.file_url && (
-                    <a href={r.file_url} target="_blank" rel="noreferrer"
+                    <a href={ensureAbsoluteUrl(r.file_url)} target="_blank" rel="noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs bg-indigo-50 border border-indigo-200/50 hover:bg-indigo-100/80 text-indigo-700 font-extrabold px-3.5 py-2 rounded-xl transition-all cursor-pointer">
                       <FileText size={12} /> View Attached Weekly File <ArrowUpRight size={12} />
                     </a>

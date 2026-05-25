@@ -169,12 +169,26 @@ async def submit_portfolio(
     existing = supabase.table("ojt_grades").select("id") \
         .eq("placement_id", str(data.placement_id)).execute()
 
-    if existing.data:
-        result = supabase.table("ojt_grades").update(update) \
-            .eq("placement_id", str(data.placement_id)).execute()
-    else:
-        update["placement_id"] = str(data.placement_id)
-        result = supabase.table("ojt_grades").insert(update).execute()
+    try:
+        if existing.data:
+            result = supabase.table("ojt_grades").update(update) \
+                .eq("placement_id", str(data.placement_id)).execute()
+        else:
+            update["placement_id"] = str(data.placement_id)
+            result = supabase.table("ojt_grades").insert(update).execute()
+    except Exception as e:
+        # Fallback if the file_name columns don't exist in the DB schema yet
+        if any(col in str(e) or "PGRST204" in str(e) for col in ("portfolio_file_name", "narrative_report_file_name")):
+            update.pop("portfolio_file_name", None)
+            update.pop("narrative_report_file_name", None)
+            if existing.data:
+                result = supabase.table("ojt_grades").update(update) \
+                    .eq("placement_id", str(data.placement_id)).execute()
+            else:
+                update["placement_id"] = str(data.placement_id)
+                result = supabase.table("ojt_grades").insert(update).execute()
+        else:
+            raise e
 
     if not result.data:
         raise HTTPException(500, "Failed to update portfolio")

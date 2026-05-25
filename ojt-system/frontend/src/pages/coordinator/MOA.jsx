@@ -23,6 +23,8 @@ import {
   Paperclip,
   FileCheck
 } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 const MOA_STEPS = [
   { key: 'campus_coordinator', label: 'Campus Coordinator' },
@@ -430,7 +432,7 @@ export default function MOATracker() {
                 <div className="flex items-center gap-3 self-start md:self-center flex-wrap">
                   <StatusBadge status={moa.status} />
                   {moa.document_url && (
-                    <a href={moa.document_url} target="_blank" rel="noreferrer"
+                    <a href={ensureAbsoluteUrl(moa.document_url)} target="_blank" rel="noreferrer"
                       className="text-xs bg-indigo-50 border border-indigo-200/50 hover:bg-indigo-100/80 text-indigo-700 font-extrabold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 cursor-pointer">
                       <FileText size={12} /> {moa.document_name || 'View Document'} <ArrowUpRight size={12} />
                     </a>

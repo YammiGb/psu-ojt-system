@@ -5,6 +5,8 @@ import StatusBadge from '../../components/StatusBadge'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import toast from 'react-hot-toast'
 import { Plus, BookOpen, ChevronDown, ChevronUp, X, Paperclip, FileCheck } from 'lucide-react'
+import { ensureAbsoluteUrl } from '../../utils/url'
+
 
 export default function StudentWeeklyReports() {
   const qc = useQueryClient()
@@ -178,7 +180,7 @@ export default function StudentWeeklyReports() {
                       )}
                       {r.file_url && (
                         <div className="pt-2">
-                          <a href={r.file_url} target="_blank" rel="noreferrer"
+                          <a href={ensureAbsoluteUrl(r.file_url)} target="_blank" rel="noreferrer"
                             className="inline-flex items-center gap-1.5 text-blue-750 hover:text-blue-900 font-extrabold text-xs hover:underline bg-blue-50/60 hover:bg-blue-100 border border-blue-150 px-3 py-1.5 rounded-xl transition-all">
                             <Paperclip size={12} />
                             {r.file_name || 'View Supporting Document'} →
