@@ -1,5 +1,6 @@
 import { useAuth } from '../../context/AuthContext'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
 import { monitoringService } from '../../services'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { Users, Briefcase, FileCheck, AlertTriangle, Clock, CheckCircle, FileText, TrendingUp, GraduationCap } from 'lucide-react'
@@ -138,22 +139,22 @@ export default function CoordinatorDashboard() {
       <div className="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/40 p-6 sm:p-8">
         <h2 className="text-xl font-black text-blue-950 mb-5 pb-3 border-b border-gray-100">Quick Portal Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <a href="/coordinator/applications" className="p-4.5 rounded-2xl bg-gradient-to-br from-blue-50/60 to-blue-50/20 border border-blue-100 hover:border-blue-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
+          <Link to="/coordinator/applications" className="p-4.5 rounded-2xl bg-gradient-to-br from-blue-50/60 to-blue-50/20 border border-blue-100 hover:border-blue-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
             <FileCheck size={20} className="mx-auto mb-2 text-slate-400" />
-            <p className="text-[10px] font-black text-blue-950 uppercase tracking-wider">Review Applications</p>
-          </a>
-          <a href="/coordinator/placements" className="p-4.5 rounded-2xl bg-gradient-to-br from-green-50/60 to-green-50/20 border border-green-100 hover:border-green-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
+            <p className="text-[10px] font-black text-blue-955 uppercase tracking-wider">Review Applications</p>
+          </Link>
+          <Link to="/coordinator/placements" className="p-4.5 rounded-2xl bg-gradient-to-br from-green-50/60 to-green-50/20 border border-green-100 hover:border-green-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
             <Briefcase size={20} className="mx-auto mb-2 text-slate-400" />
             <p className="text-[10px] font-black text-green-955 uppercase tracking-wider">Manage Placements</p>
-          </a>
-          <a href="/coordinator/moa" className="p-4.5 rounded-2xl bg-gradient-to-br from-amber-50/60 to-amber-50/20 border border-amber-100 hover:border-amber-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
+          </Link>
+          <Link to="/coordinator/moa" className="p-4.5 rounded-2xl bg-gradient-to-br from-amber-50/60 to-amber-50/20 border border-amber-100 hover:border-amber-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
             <FileText size={20} className="mx-auto mb-2 text-slate-400" />
             <p className="text-[10px] font-black text-amber-955 uppercase tracking-wider">MOA Workflow</p>
-          </a>
-          <a href="/coordinator/evaluations" className="p-4.5 rounded-2xl bg-gradient-to-br from-purple-50/60 to-purple-50/20 border border-purple-100 hover:border-purple-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
+          </Link>
+          <Link to="/coordinator/evaluations" className="p-4.5 rounded-2xl bg-gradient-to-br from-purple-50/60 to-purple-50/20 border border-purple-100 hover:border-purple-300 hover:shadow-md transition text-center flex flex-col justify-center items-center">
             <CheckCircle size={20} className="mx-auto mb-2 text-slate-400" />
             <p className="text-[10px] font-black text-purple-955 uppercase tracking-wider">View Evaluations</p>
-          </a>
+          </Link>
         </div>
       </div>
 

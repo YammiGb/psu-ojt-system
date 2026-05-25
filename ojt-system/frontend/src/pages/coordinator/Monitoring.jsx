@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
 import { monitoringService } from '../../services'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import HoursProgress from '../../components/HoursProgress'
@@ -171,8 +172,8 @@ export default function CoordinatorMonitoring() {
 
             {/* Warnings / Pending review alerts */}
             {p.pending_weekly_reports > 0 && (
-              <a 
-                href="/coordinator/weekly-reports" 
+              <Link 
+                to="/coordinator/weekly-reports" 
                 className="flex items-center justify-between gap-2 text-xs font-bold text-amber-700 bg-amber-50/60 border border-amber-200/50 hover:bg-amber-100/80 rounded-xl px-4 py-2.5 mt-3 shadow-sm transition-all cursor-pointer"
               >
                 <span className="flex items-center gap-2">
@@ -180,7 +181,7 @@ export default function CoordinatorMonitoring() {
                   <span>{p.pending_weekly_reports} Weekly Report{p.pending_weekly_reports > 1 ? 's' : ''} Pending Review</span>
                 </span>
                 <ChevronRight size={14} className="text-amber-500" />
-              </a>
+              </Link>
             )}
           </div>
         ))}
