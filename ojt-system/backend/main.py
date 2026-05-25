@@ -7,7 +7,7 @@ from app.api.routes import (
 
 from app.core.config import settings
 
-app = FastAPI(title="OJT System", version="1.0.0", redirect_slashes=False)
+app = FastAPI(title="OJT System", version="1.0.0", redirect_slashes=True)
 
 app.add_middleware(
     CORSMiddleware,

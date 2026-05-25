@@ -20,7 +20,7 @@ class DTRCreate(BaseModel):
 
 
 # ── Log a DTR entry (student) ─────────────────────────────
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 async def log_dtr(
     data: DTRCreate,
     current_user=Depends(get_current_user),

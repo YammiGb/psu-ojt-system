@@ -6,7 +6,7 @@ from uuid import UUID
 router = APIRouter(prefix="/notifications", tags=["Notifications"])
 
 
-@router.get("/")
+@router.get("")
 async def get_my_notifications(
     is_read: bool = None,
     current_user=Depends(get_current_user),

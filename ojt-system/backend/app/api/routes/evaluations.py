@@ -96,7 +96,7 @@ def recompute_grade(supabase, placement_id: str):
 # ── FIXED ROUTE ORDER: specific routes BEFORE /{placement_id} ──
 
 # ── Submit evaluation (coordinator or supervisor) ─────────
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 async def submit_evaluation(
     data: EvaluationCreate,
     current_user=Depends(get_current_user),

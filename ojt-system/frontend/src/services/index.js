@@ -49,10 +49,10 @@ export const placementService = {
 }
 
 export const moaService = {
-  list:     (params)           => api.get('/moa/', { params }),
+  list:     (params)           => api.get('/moa', { params }),
   get:      (id)               => api.get(`/moa/${id}`),
   initiate: (company_id, document_url, document_name, semester, academic_year) =>
-                                  api.post('/moa/', { company_id, document_url, document_name, semester, academic_year }),
+                                  api.post('/moa', { company_id, document_url, document_name, semester, academic_year }),
   uploadMOAFile: (file) => {
     const fd = new FormData()
     fd.append('file', file)
@@ -66,7 +66,7 @@ export const moaService = {
 }
 
 export const dtrService = {
-  log:     (data)        => api.post('/dtr/', data),
+  log:     (data)        => api.post('/dtr', data),
   getLogs: (placementId) => api.get(`/dtr/${placementId}`),
   verify:  (dtrId)       => api.put(`/dtr/${dtrId}/verify`),
   delete:  (dtrId)       => api.delete(`/dtr/${dtrId}`),
@@ -75,7 +75,7 @@ export const dtrService = {
 export const monitoringService = {
   getDashboardStats:  ()                        => api.get('/monitoring/dashboard-stats'),
   getWeeklyReports:       (placementId) => api.get(`/weekly-reports/${placementId}`),
-  submitWeeklyReport:     (data)        => api.post('/weekly-reports/', data),
+  submitWeeklyReport:     (data)        => api.post('/weekly-reports', data),
   uploadWeeklyReportFile: (file)        => {
     const fd = new FormData()
     fd.append('file', file)
@@ -83,7 +83,7 @@ export const monitoringService = {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
-  listAllReports:     (status)                  => api.get('/weekly-reports/', { params: status ? { status } : {} }),
+  listAllReports:     (status)                  => api.get('/weekly-reports', { params: status ? { status } : {} }),
   acknowledgeReport:  (id, remarks, status)     => api.put(`/weekly-reports/${id}/acknowledge`, { remarks, status }),
   // Return placements for a section/semester enriched with hours and pending report counts
   sectionView: async ({ section, semester } = {}) => {
@@ -132,7 +132,7 @@ export const monitoringService = {
 }
 
 export const evaluationService = {
-  submit:          (data)        => api.post('/evaluations/', data),
+  submit:          (data)        => api.post('/evaluations', data),
   getEvaluations:  (placementId) => api.get(`/evaluations/${placementId}`),
   getGrade:        (placementId) => api.get(`/evaluations/${placementId}/grade`),
   submitPortfolio: (data)        => api.post('/evaluations/portfolio', data),
