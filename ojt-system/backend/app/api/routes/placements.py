@@ -62,10 +62,13 @@ async def assign_student(
     if existing.data:
         raise HTTPException(400, "Student already has a placement this semester")
 
+    # Clean application_id if it's empty string
+    app_id = data.application_id if (data.application_id and data.application_id.strip() != "") else None
+
     payload = {
         "student_id":     data.student_id,
         "company_id":     data.company_id,
-        "application_id": data.application_id,
+        "application_id": app_id,
         "semester":       data.semester,
         "academic_year":  data.academic_year,
         "ojt_status":     "active",
@@ -81,12 +84,12 @@ async def assign_student(
         raise HTTPException(500, "Failed to create placement")
 
     # Mark application as approved if linked
-    if data.application_id:
+    if app_id:
         supabase.table("ojt_applications").update({
             "status":      "approved",
             "reviewed_by": current_user["id"],
             "reviewed_at": datetime.utcnow().isoformat(),
-        }).eq("id", data.application_id).execute()
+        }).eq("id", app_id).execute()
 
     return result.data[0]
 
