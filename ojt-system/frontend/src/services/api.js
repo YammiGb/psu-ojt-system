@@ -26,9 +26,10 @@ api.interceptors.response.use(
         localStorage.setItem('access_token', data.access_token)
         original.headers.Authorization = `Bearer ${data.access_token}`
         return api(original)
-      } catch {
+      } catch (err) {
         localStorage.clear()
         window.location.href = '/login'
+        return Promise.reject(err)
       }
     }
     return Promise.reject(error)
