@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { evaluationService, dtrService } from '../../services'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { Clock } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function SupervisorDTR() {
+  const qc = useQueryClient()
   const [selected, setSelected] = useState(null)
 
   const { data: interns = [], isLoading: internsLoading } = useQuery({
@@ -17,6 +19,21 @@ export default function SupervisorDTR() {
     queryFn: () => dtrService.getLogs(selected.id).then(r => r.data),
     enabled: !!selected?.id,
   })
+
+  const verifyMut = useMutation({
+    mutationFn: (dtrId) => dtrService.verify(dtrId),
+    onSuccess: () => {
+      toast.success('DTR entry successfully verified!')
+      qc.invalidateQueries(['supervisor-dtr', selected?.id])
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.detail || 'Failed to verify DTR')
+    }
+  })
+
+  const handleVerify = (dtrId) => {
+    verifyMut.mutate(dtrId)
+  }
 
   const logs = dtrData?.logs || []
   const summary = dtrData?.summary || { total_rendered: 0, required: 0, remaining: 0, percentage: 0 }
@@ -160,13 +177,18 @@ export default function SupervisorDTR() {
                             </td>
                             <td className="px-5 py-4 font-extrabold text-gray-700 text-xs tracking-wider capitalize whitespace-nowrap">{log.dtr_type?.replace('_',' ')}</td>
                             <td className="px-5 py-4 text-center whitespace-nowrap">
-                              <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm border ${
-                                log.verified 
-                                  ? 'bg-green-50 text-green-700 border-green-200/50' 
-                                  : 'bg-amber-50 text-amber-800 border-amber-200/50'
-                              }`}>
-                                {log.verified ? 'Verified' : 'Pending'}
-                              </span>
+                              {log.verified ? (
+                                <span className="text-[10px] font-black px-2.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm border bg-green-50 text-green-700 border-green-200/50">
+                                  Verified
+                                </span>
+                              ) : (
+                                <button
+                                  onClick={() => handleVerify(log.id)}
+                                  disabled={verifyMut.isPending}
+                                  className="bg-amber-50 hover:bg-amber-100 text-amber-800 hover:text-amber-900 border border-amber-200/50 hover:border-amber-300 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-200 cursor-pointer active:scale-95 disabled:opacity-50 shadow-sm flex items-center gap-1 mx-auto">
+                                  Verify Log
+                                </button>
+                              )}
                             </td>
                             <td className="px-5 py-4 text-gray-400 font-semibold text-xs truncate max-w-xs" title={log.remarks || ''}>{log.remarks || '—'}</td>
                           </tr>

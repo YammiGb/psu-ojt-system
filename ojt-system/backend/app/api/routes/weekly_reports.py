@@ -31,6 +31,7 @@ class AcknowledgeBody(BaseModel):
 
 # ── Submit report (student) ───────────────────────────────
 @router.post("", status_code=201)
+@router.post("/", status_code=201, include_in_schema=False)
 async def submit_report(
     data: ReportCreate,
     current_user=Depends(get_current_user),
@@ -162,6 +163,7 @@ async def get_reports(
 
 # ── List all reports (coordinator view) ───────────────────
 @router.get("")
+@router.get("/", include_in_schema=False)
 async def list_all_reports(
     status: Optional[str] = None,
     current_user=Depends(CoordOrAdmin),

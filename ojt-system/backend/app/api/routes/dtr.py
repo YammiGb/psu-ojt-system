@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date, time, datetime
-from app.core.security import get_current_user, CoordOrAdmin
+from app.core.security import get_current_user, CoordOrAdmin, require_roles
 from app.db.database import get_supabase
 from uuid import UUID
 
@@ -127,13 +127,53 @@ async def get_dtr_logs(
     }
 
 
-# ── Verify a DTR entry (coordinator/admin) ────────────────
+# ── Verify a DTR entry (coordinator/admin/supervisor) ─────
 @router.put("/{dtr_id}/verify")
 async def verify_dtr(
     dtr_id: UUID,
-    current_user=Depends(CoordOrAdmin),
+    current_user=Depends(require_roles("coordinator", "admin", "supervisor")),
     supabase=Depends(get_supabase),
 ):
+    if current_user["role"] == "supervisor":
+        # Get placement_id from the DTR log
+        dtr = supabase.table("dtr_logs").select("placement_id").eq("id", str(dtr_id)).single().execute()
+        if not dtr.data:
+            raise HTTPException(404, "DTR entry not found")
+        
+        # Get company_id from the placement
+        placement = supabase.table("placements").select("company_id").eq("id", dtr.data["placement_id"]).single().execute()
+        if not placement.data:
+            raise HTTPException(404, "Placement not found")
+            
+        company_id = placement.data["company_id"]
+        
+        # Verify supervisor is linked to this company
+        is_linked = False
+        
+        # 1. Try checking by supervisor_user_id
+        try:
+            company = supabase.table("companies").select("id") \
+                .eq("id", company_id) \
+                .eq("supervisor_user_id", current_user["id"]).execute()
+            if company.data:
+                is_linked = True
+        except Exception:
+            pass
+            
+        # 2. Fallback: check contact_email if supervisor_user_id check didn't succeed
+        if not is_linked:
+            try:
+                company = supabase.table("companies").select("id") \
+                    .eq("id", company_id) \
+                    .eq("contact_email", current_user["email"]).execute()
+                if company.data:
+                    is_linked = True
+            except Exception:
+                pass
+                
+        if not is_linked:
+            raise HTTPException(403, "Access denied. You can only verify DTR logs for your own interns.")
+
     result = supabase.table("dtr_logs").update({
         "verified":    True,
         "verified_by": current_user["id"],
