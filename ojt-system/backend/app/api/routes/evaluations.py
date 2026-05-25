@@ -304,12 +304,12 @@ async def get_my_interns(
             return []
         result = supabase.table("placements").select(
             "*, students(student_number, section, program, users(full_name, email)), companies(name)"
-        ).in_("id", placement_ids).eq("ojt_status", "active").execute()
+        ).in_("id", placement_ids).in_("ojt_status", ["active", "completed"]).execute()
     else:
         company_id = company.data[0]["id"]
         result = supabase.table("placements").select(
             "*, students(student_number, section, program, users(full_name, email)), companies(name)"
-        ).eq("company_id", company_id).eq("ojt_status", "active").execute()
+        ).eq("company_id", company_id).in_("ojt_status", ["active", "completed"]).execute()
 
     return result.data or []
 
