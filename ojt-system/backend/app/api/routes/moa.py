@@ -43,6 +43,7 @@ class AdvanceBody(BaseModel):
 
 
 @router.post("", status_code=201)
+@router.post("/", status_code=201, include_in_schema=False)
 async def initiate_moa(
     data: MOAInitiate,
     current_user=Depends(CoordinatorOrAdmin),
@@ -139,6 +140,7 @@ async def moa_summary_report(
 
 
 @router.get("")
+@router.get("/", include_in_schema=False)
 async def list_moas(
     status: str = None,
     current_user=Depends(get_current_user),
