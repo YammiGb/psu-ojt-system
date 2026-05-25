@@ -53,6 +53,26 @@ export default function CoordinatorEvaluations() {
     onError: (err) => toast.error(err.response?.data?.detail || 'Failed'),
   })
 
+  const handleRubricChange = (key, value) => {
+    const updatedForm = { ...evalForm, [key]: value }
+    const rubrics = [
+      updatedForm.technical_skills,
+      updatedForm.work_attitude,
+      updatedForm.punctuality,
+      updatedForm.communication,
+      updatedForm.initiative
+    ]
+    const filledRubrics = rubrics.map(r => parseFloat(r)).filter(r => !isNaN(r))
+    if (filledRubrics.length > 0) {
+      const sum = filledRubrics.reduce((s, val) => s + val, 0)
+      const avg = Math.round(sum / filledRubrics.length)
+      updatedForm.overall_score = avg.toString()
+    } else {
+      updatedForm.overall_score = ''
+    }
+    setEvalForm(updatedForm)
+  }
+
   const handleEvalSubmit = (e) => {
     e.preventDefault()
     evalMut.mutate({ ...evalForm, evaluator_type: 'coordinator' })
@@ -161,7 +181,7 @@ export default function CoordinatorEvaluations() {
                         <label className="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1.5">{label}</label>
                         <input type="number" min="0" max="100" className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-900 bg-white" 
                           value={evalForm[key]}
-                          onChange={e => setEvalForm({...evalForm, [key]: e.target.value})} />
+                          onChange={e => handleRubricChange(key, e.target.value)} />
                       </div>
                     ))}
                     <div>
