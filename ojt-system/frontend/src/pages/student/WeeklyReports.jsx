@@ -225,7 +225,7 @@ export default function StudentWeeklyReports() {
                   <div>
                     <label className="label text-xs font-bold text-gray-700 mb-1">Week #</label>
                     <input type="number" className="input" value={form.week_number} min={1}
-                      onChange={e => setForm({ ...form, week_number: parseInt(e.target.value) })} required />
+                      onChange={e => setForm({ ...form, week_number: parseInt(e.target.value) || '' })} required />
                   </div>
                   <div className="col-span-2">
                     <div className="grid grid-cols-2 gap-2">
