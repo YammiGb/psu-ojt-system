@@ -53,7 +53,7 @@ async def initiate_moa(
     if not company.data:
         raise HTTPException(404, "Company not found")
 
-    result = supabase.table("moa_requests").insert({
+    payload = {
         "company_id": str(data.company_id),
         "initiated_by": current_user["id"],
         "status": "campus_coordinator",
@@ -62,7 +62,17 @@ async def initiate_moa(
         "document_name": data.document_name,
         "semester": data.semester,
         "academic_year": data.academic_year,
-    }).execute()
+    }
+
+    try:
+        result = supabase.table("moa_requests").insert(payload).execute()
+    except Exception as e:
+        # Fallback if document_name column does not exist in database yet
+        if "document_name" in str(e) or "PGRST204" in str(e):
+            payload.pop("document_name", None)
+            result = supabase.table("moa_requests").insert(payload).execute()
+        else:
+            raise e
 
     if not result.data:
         raise HTTPException(500, "Failed to create MOA request")
